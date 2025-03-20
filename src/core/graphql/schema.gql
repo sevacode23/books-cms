@@ -1,0 +1,135 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddBookAuthorsInput {
+  authorIds: [String!]!
+  id: String!
+}
+
+type Author {
+  birthDate: Date
+  books: [Book!]!
+  fullName: String!
+  id: ID!
+}
+
+type Book {
+  authors: [Author!]!
+  description: String
+  id: ID!
+  isbn: String!
+  language: String!
+  pageCount: Int!
+  publishedAt: DateTimeISO!
+  title: String!
+}
+
+input BooksFilterInput {
+  author: String
+  isbn: String
+  title: String
+  year: Int
+}
+
+enum BooksSortField {
+  PAGE_COUNT
+  PUBLISHED_AT
+  TITLE
+}
+
+input CreateAuthorInput {
+  birthDate: Date
+  fullName: String!
+}
+
+input CreateBookInput {
+  authorIds: [String!]
+  description: String
+  isbn: String!
+  language: String!
+  pageCount: Int!
+  publishedAt: DateTime!
+  title: String!
+}
+
+input CreateReviewInput {
+  bookId: String!
+  comment: String
+  rating: Int!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+type Mutation {
+  addBookAuthors(input: AddBookAuthorsInput!): Book!
+  createAuthor(input: CreateAuthorInput!): Author!
+  createBook(input: CreateBookInput!): Book!
+  createReview(input: CreateReviewInput!): Review!
+  removeBook(id: String!): Book
+  removeBookAuthors(input: RemoveBookAuthorsInput!): Book!
+  updateBook(input: UpdateBookInput!): Book!
+}
+
+type Query {
+  author(birthDate: DateTime, firstName: String, id: String, lastName: String): Author
+  authors(birthDate: DateTime, firstName: String, id: String, lastName: String): [Author]!
+  book(id: String!): Book
+  bookReviews(bookId: String!): [Review!]
+  books(input: SearchBooksInput!): [Book!]!
+}
+
+input RemoveBookAuthorsInput {
+  authorIds: [String!]!
+  id: String!
+}
+
+type Review {
+  book: Book!
+  bookId: String!
+  comment: String
+  rating: Int!
+  reviewId: String!
+  timestamp: DateTimeISO!
+  userId: String!
+}
+
+input SearchBooksInput {
+  filter: BooksFilterInput
+  limit: Int
+  offset: Int
+  sort: [SortBooksInput!]
+}
+
+input SortBooksInput {
+  field: BooksSortField!
+  order: SortOrderEnum!
+}
+
+enum SortOrderEnum {
+  ASC
+  DESC
+}
+
+input UpdateBookInput {
+  description: String
+  id: ID!
+  isbn: String
+  language: String
+  pageCount: Int
+  publishedAt: DateTime
+  title: String
+}

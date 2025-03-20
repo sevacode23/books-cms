@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./
+    env_file:
+      - .env.development
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - books-network
+    develop:
+      watch:
+        - path: ./package.json
+          action: rebuild
+        - path: ./
+          target: /usr/src/app
+          action: sync
+
+  postgres:
+    image: postgres:17
+    restart: always
+    env_file:
+      - .env.development
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - books-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    command: [ "redis-server", "--appendonly", "yes" ]
+    ports:
+      - "6379:6379"
+    networks:
+      - books-network
+    volumes:
+      - redis-data:/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  books-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:

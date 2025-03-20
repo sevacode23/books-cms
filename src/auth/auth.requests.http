@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:8080
+@token = your_jwt_token_here
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test3.com",
+  "password": "password3"
+}
+
+###
+@token = {{login.response.body.access_token}}
+
+### Sign Up
+# @name signup
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@test3.com",
+  "password": "password3"
+}
+###
+@token = {{signup.response.body.access_token}}
+
+### Logout
+POST {{baseUrl}}/auth/logout
+
+### Get User
+GET {{baseUrl}}/auth/user
+Authorization: Bearer {{token}}
+
