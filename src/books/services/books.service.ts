@@ -44,7 +44,7 @@ export class BooksService {
     return this.booksRepository.findBy(options);
   }
 
-  /** Finds a single book by ID or returns cached book if exists
+  /** Finds a single book and cache it by ID or returns cached book if exists
    * @param id - The ID of the book to find
    * @returns The book entity that matches the ID or null if not found
    */

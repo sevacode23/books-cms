@@ -26,7 +26,7 @@ export class ReviewsResolver {
   ) {}
 
   /** ResolveField: Resolves the book field */
-  @ResolveField('book', () => Book)
+  @ResolveField('book', () => Book, { nullable: true })
   async getBook(@Parent() review: Review) {
     return this.booksService.findOneById(review.bookId);
   }
