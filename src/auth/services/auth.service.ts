@@ -40,7 +40,9 @@ export class AuthService {
     };
   }
 
-  /** Validates user credentials */
+  /** Validates user credentials
+   *  Used in LocalStrategy
+   */
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findOneBy({ email });
 
