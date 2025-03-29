@@ -15,6 +15,7 @@ export class AuthorsLoader {
 
       // Group authors by book id
       const authorsMap = new Map<string, AuthorEntity[]>();
+
       authors.forEach((author) => {
         author.books.forEach((book) => {
           if (!authorsMap.has(book.id)) {

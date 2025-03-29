@@ -1,0 +1,17 @@
+# syntax=docker/dockerfile:1
+
+ARG NODE_VERSION=22.9.0
+
+FROM node:${NODE_VERSION}-alpine
+
+ENV NODE_ENV test
+
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+CMD ["yarn", "test:e2e"]

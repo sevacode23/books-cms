@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  server-test:
+    build:
+      context: ./
+      dockerfile: Dockerfile.test
+    env_file:
+      - .env.test
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_started
+      dynamodb-test:
+        condition: service_started
+    networks:
+      - test-network
+
+  postgres-test:
+    image: postgres:17
+    env_file:
+      - .env.test
+    ports:
+      - "5434:5432"
+    networks:
+      - test-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-test:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    networks:
+      - test-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dynamodb-test:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge

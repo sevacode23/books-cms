@@ -11,6 +11,15 @@ export const getTypeOrmConfig = (
 ): TypeOrmModuleOptions => {
   const postgresConfig = configService.get<IPostgresConfig>('postgres');
 
+  const migrations =
+    process.env.NODE_ENV === 'test'
+      ? []
+      : [__dirname + '/migrations/**/*{.ts,.js}'];
+  const synchronize = process.env.NODE_ENV === 'test';
+  const migrationsRun = process.env.NODE_ENV !== 'test';
+  const migrationsTableName =
+    process.env.NODE_ENV === 'test' ? undefined : 'migrations';
+
   return {
     type: 'postgres',
     host: postgresConfig?.host,
@@ -18,10 +27,10 @@ export const getTypeOrmConfig = (
     username: postgresConfig?.username,
     password: postgresConfig?.password,
     database: postgresConfig?.database,
-    synchronize: false,
     entities: [UserEntity, BookEntity, AuthorEntity],
-    migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-    migrationsRun: true,
-    migrationsTableName: 'migrations',
+    synchronize,
+    migrations,
+    migrationsRun,
+    migrationsTableName,
   };
 };

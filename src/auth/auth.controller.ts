@@ -44,7 +44,7 @@ export class AuthController {
   @Post(AUTH_ROUTES.LOGOUT)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  logout(@Request() _req: ILocalAuthUserRequest) {}
+  logout() {}
 
   @Get(AUTH_ROUTES.USER)
   @UseGuards(JwtAuthGuard)

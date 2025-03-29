@@ -1,3 +1,4 @@
+import path from 'path';
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 
@@ -7,16 +8,18 @@ export default defineConfig({
     globals: true,
     root: './',
     alias: {
-      '@': './src',
+      '@': path.resolve(__dirname, './src'),
     },
+  },
+  esbuild: {
+    target: 'node22',
   },
 
   plugins: [swc.vite()],
 
   resolve: {
     alias: {
-      // Ensure Vitest correctly resolves TypeScript path aliases
-      '@': './src',
+      '@': path.resolve(__dirname, './src'),
     },
   },
 });
